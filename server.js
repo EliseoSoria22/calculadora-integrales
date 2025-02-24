@@ -17,7 +17,7 @@ app.post('/calcular', (req, res) => {
         return res.status(400).json({ error: 'Se requiere una función y una variable.' });
     }
 
-    const comando = `python sympy_script.py`;
+    const comando = `python3 sympy_script.py`;
     const inputData = JSON.stringify({
         funcion: funcion,
         variable: variable,
@@ -25,11 +25,15 @@ app.post('/calcular', (req, res) => {
         limiteSuperior: limiteSuperior
     });
 
+    console.log("Datos enviados a Python:", inputData);
+
     const proceso = exec(comando, (error, stdout, stderr) => {
         if (error) {
             console.error("Error al ejecutar Python:", stderr);
             return res.status(500).json({ error: stderr });
         }
+
+        console.log("Salida de Python:", stdout);
 
         try {
             const resultado = JSON.parse(stdout).resultado;
