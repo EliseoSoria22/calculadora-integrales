@@ -1,11 +1,13 @@
 let activeInputField = null;
 
-// Detectar el campo de entrada activo
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('focus', function() {
-        activeInputField = this;
+// Detectar el campo de entrada activo (solo en el navegador)
+if (typeof window !== 'undefined') { // Verifica si estamos en el navegador
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() {
+            activeInputField = this;
+        });
     });
-});
+}
 
 // Evento para calcular la integral
 document.getElementById('calcular').addEventListener('click', function() {

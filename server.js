@@ -1,30 +1,53 @@
 const express = require('express');
 const { exec } = require('child_process');
-const path = require('path');
 const app = express();
-const port = process.env.PORT || 3000; // Usar el puerto asignado por Render
+const port = 3000;
 
-// Servir archivos estáticos desde la carpeta "public"
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Middleware para parsear el cuerpo de las solicitudes en formato JSON
+app.use(express.static(__dirname));
 app.use(express.json());
 
-// Ruta para calcular la integral
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
 app.post('/calcular', (req, res) => {
     const { funcion, variable, limiteInferior, limiteSuperior } = req.body;
 
-    // Ejecutar el script de Python
-    exec(`python3 ${path.join(__dirname, 'sympy_script.py')} "${funcion}" "${variable}" "${limiteInferior}" "${limiteSuperior}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error: ${stderr}`);
-            return res.status(500).send(stderr);
-        }
-        res.json({ resultado: stdout });
+    if (!funcion || !variable) {
+        return res.status(400).json({ error: 'Se requiere una función y una variable.' });
+    }
+
+    const comando = `python sympy_script.py`;
+    const inputData = JSON.stringify({
+        funcion: funcion,
+        variable: variable,
+        limiteInferior: limiteInferior,
+        limiteSuperior: limiteSuperior
     });
+
+    console.log("Datos enviados a Python:", inputData);
+
+    const proceso = exec(comando, (error, stdout, stderr) => {
+        if (error) {
+            console.error("Error al ejecutar Python:", stderr);
+            return res.status(500).json({ error: stderr });
+        }
+
+        console.log("Salida de Python:", stdout);
+
+        try {
+            const resultado = JSON.parse(stdout).resultado;
+            res.json({ resultado: resultado });
+        } catch (e) {
+            console.error("Error al parsear la salida de Python:", e);
+            res.status(500).json({ error: "Error al procesar el resultado." });
+        }
+    });
+
+    proceso.stdin.write(inputData);
+    proceso.stdin.end();
 });
 
-// Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
