@@ -1,7 +1,7 @@
 const express = require('express');
 const { exec } = require('child_process');
 const app = express();
-const port = process.env.PORT || 3000; // Usa process.env.PORT o 3000 por defecto
+const port = process.env.PORT || 3000;
 
 app.use(express.static(__dirname));
 app.use(express.json());
@@ -25,15 +25,11 @@ app.post('/calcular', (req, res) => {
         limiteSuperior: limiteSuperior
     });
 
-    console.log("Datos enviados a Python:", inputData);
-
     const proceso = exec(comando, (error, stdout, stderr) => {
         if (error) {
             console.error("Error al ejecutar Python:", stderr);
             return res.status(500).json({ error: stderr });
         }
-
-        console.log("Salida de Python:", stdout);
 
         try {
             const resultado = JSON.parse(stdout).resultado;
