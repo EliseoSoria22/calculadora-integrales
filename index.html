@@ -210,19 +210,19 @@
         <div id="resultado"></div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            MathJax = {
-                startup: {
-                    pageReady: () => {
-                        return MathJax.startup.defaultPageReady().then(() => {
-                            document.getElementById('buttonContainer').classList.remove('hidden');
-                            document.getElementById('buttonContainer').classList.add('visible');
-                        });
-                    }
+        // Esperar a que MathJax esté listo
+        MathJax = {
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        // Mostrar los botones después de que MathJax haya renderizado el contenido
+                        document.getElementById('buttonContainer').classList.remove('hidden');
+                        document.getElementById('buttonContainer').classList.add('visible');
+                    });
                 }
-            };
-        });
-        </script>
+            }
+        };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
