@@ -133,12 +133,6 @@
             flex-wrap: wrap;
             gap: 5px;
             margin-bottom: 10px;
-            opacity: 0; /* Ocultar inicialmente */
-            transition: opacity 0.3s ease; /* Transición suave */
-        }
-
-        .button-container.visible {
-            opacity: 1; /* Mostrar con opacidad completa */
         }
 
         .button-container button {
@@ -217,7 +211,6 @@
                     return MathJax.startup.defaultPageReady().then(() => {
                         // Mostrar los botones después de que MathJax haya renderizado el contenido
                         document.getElementById('buttonContainer').classList.remove('hidden');
-                        document.getElementById('buttonContainer').classList.add('visible');
                     });
                 }
             }

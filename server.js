@@ -1,7 +1,7 @@
 const express = require('express');
 const { exec } = require('child_process');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(express.static(__dirname));
 app.use(express.json());
@@ -17,7 +17,7 @@ app.post('/calcular', (req, res) => {
         return res.status(400).json({ error: 'Se requiere una función y una variable.' });
     }
 
-    const comando = `python3 sympy_script.py`;
+    const comando = `python sympy_script.py`;
     const inputData = JSON.stringify({
         funcion: funcion,
         variable: variable,
