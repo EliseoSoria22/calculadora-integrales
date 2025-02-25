@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Tu código para renderizar LaTeX aquí
+  });
 let activeInputField = null;
 
 // Detectar el campo de entrada activo
