@@ -33,19 +33,16 @@ document.getElementById('calcular').addEventListener('click', function() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.text(); // Captura la respuesta como texto
+        return response.json(); // Analizar la respuesta JSON
     })
-    .then(text => {
-        console.log('Respuesta del servidor (texto):', text); // Muestra la respuesta en la consola
-        try {
-            const data = JSON.parse(text); // Intenta convertirla a JSON
+    .then(data => {
+        if (data && data.resultado) {
             document.getElementById('resultado').innerHTML = `\\(${data.resultado}\\)`;
             MathJax.typesetPromise(['#resultado']); // Renderizar LaTeX
-        } catch (e) {
-            console.error('Error al parsear JSON:', e);
-            document.getElementById('resultado').innerText = 'Error: Respuesta del servidor no válida.';
+        } else {
+            document.getElementById('resultado').innerText = 'Error: Resultado inválido.';
         }
     })
     .catch(error => {

@@ -47,3 +47,7 @@ app.post('/calcular', (req, res) => {
     proceso.stdin.write(inputData);
     proceso.stdin.end();
 });
+
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
