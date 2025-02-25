@@ -1,15 +1,18 @@
 const express = require('express');
 const { exec } = require('child_process');
+const path = require('path');
 const app = express();
-const port = 3000;
 
-app.use(express.static(__dirname));
+// Sirve archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
+// Ruta raíz para servir index.html
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Ruta para calcular la integral
 app.post('/calcular', (req, res) => {
     const { funcion, variable, limiteInferior, limiteSuperior } = req.body;
 
@@ -17,12 +20,12 @@ app.post('/calcular', (req, res) => {
         return res.status(400).json({ error: 'Se requiere una función y una variable.' });
     }
 
-    const comando = `python sympy_script.py`;
+    const comando = `python3 sympy_script.py`; // Usar 'python3' para garantizar compatibilidad
     const inputData = JSON.stringify({
         funcion: funcion,
         variable: variable,
-        limiteInferior: limiteInferior,
-        limiteSuperior: limiteSuperior
+        limiteInferior: limiteInferior || '',
+        limiteSuperior: limiteSuperior || ''
     });
 
     console.log("Datos enviados a Python:", inputData);
@@ -48,6 +51,8 @@ app.post('/calcular', (req, res) => {
     proceso.stdin.end();
 });
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
+// Escuchar en el puerto proporcionado por Render o 3000 por defecto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
