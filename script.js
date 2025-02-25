@@ -31,10 +31,22 @@ document.getElementById('calcular').addEventListener('click', function() {
             limiteSuperior: limiteSuperior
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('resultado').innerHTML = `\\(${data.resultado}\\)`;
-        MathJax.typesetPromise(['#resultado']); // Renderizar LaTeX
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return response.text(); // Captura la respuesta como texto
+    })
+    .then(text => {
+        console.log('Respuesta del servidor (texto):', text); // Muestra la respuesta en la consola
+        try {
+            const data = JSON.parse(text); // Intenta convertirla a JSON
+            document.getElementById('resultado').innerHTML = `\\(${data.resultado}\\)`;
+            MathJax.typesetPromise(['#resultado']); // Renderizar LaTeX
+        } catch (e) {
+            console.error('Error al parsear JSON:', e);
+            document.getElementById('resultado').innerText = 'Error: Respuesta del servidor no válida.';
+        }
     })
     .catch(error => {
         console.error('Error:', error);
