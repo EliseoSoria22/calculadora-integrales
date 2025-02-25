@@ -1,7 +1,7 @@
 const express = require('express');
 const { exec } = require('child_process');
 const app = express();
-const port = process.env.PORT || 3000; // Usar el puerto dinámico de Railway
+const port = 3000;
 
 app.use(express.static(__dirname));
 app.use(express.json());
@@ -17,7 +17,7 @@ app.post('/calcular', (req, res) => {
         return res.status(400).json({ error: 'Se requiere una función y una variable.' });
     }
 
-    const comando = `python3 sympy_script.py`; // Usar python3 en lugar de python
+    const comando = `python sympy_script.py`;
     const inputData = JSON.stringify({
         funcion: funcion,
         variable: variable,
@@ -30,7 +30,7 @@ app.post('/calcular', (req, res) => {
     const proceso = exec(comando, (error, stdout, stderr) => {
         if (error) {
             console.error("Error al ejecutar Python:", stderr);
-            return res.status(500).json({ error: "Error al ejecutar el script de Python." });
+            return res.status(500).json({ error: stderr });
         }
 
         console.log("Salida de Python:", stdout);
