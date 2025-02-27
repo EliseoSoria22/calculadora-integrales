@@ -17,16 +17,16 @@
             color: azure;
             position: relative; /* Necesario para el posicionamiento absoluto de la imagen */
         }
-
+    
         #calculadora-imagen {
             position: absolute; /* Posicionamiento absoluto */
             top: 20px; /* Distancia desde la parte superior */
             right: 20px; /* Distancia desde la derecha */
-            width: 600px; /* Ajusta el tamaño de la imagen */
+            width: 300px; /* Ajusta el tamaño de la imagen */
             height: auto; /* Mantiene la proporción de la imagen */
             z-index: 1000; /* Asegura que la imagen esté por encima de otros elementos */
         }
-
+    
         @keyframes gradientBG {
             0% {
                 background-position: 0% 50%;
@@ -38,17 +38,17 @@
                 background-position: 0% 50%;
             }
         }
-
+    
         .container {
             max-width: 500px; /* Aumentamos el ancho máximo */
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.1);
-            padding: 30px; /* Aumentamos el padding */
+            padding: 30px; /* Ajustamos el padding para un mejor espaciado */
             border-radius: 12px;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
+    
         h1 {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
@@ -58,48 +58,52 @@
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-
+    
         label {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             font-size: 1.1rem;
             color: #fff;
+            display: block; /* Asegura que las etiquetas estén en una línea separada */
+            margin-bottom: 5px; /* Espaciado entre la etiqueta y el input */
         }
-
+    
         input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin: 5px 0 15px 0; /* Ajustamos el margen para un espaciado uniforme */
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: azure;
             border-radius: 6px;
             font-family: 'Poppins', sans-serif;
             font-size: 1rem;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
         }
-
+    
         input::placeholder {
             color: rgba(255, 255, 255, 0.7);
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
         }
-
+    
         button {
             background: black;
             cursor: pointer;
             border: none;
-            padding: 8px 16px;
+            padding: 12px; /* Ajustamos el padding para que coincida con los inputs */
             color: azure;
             font-size: 18px;
             font-weight: bold;
             position: relative;
             border-radius: 12px;
-            width: 100%;
-            margin: 10px 0;
+            width: 100%; /* Asegura que el botón tenga el mismo ancho que los inputs */
+            margin: 10px 0; /* Espaciado uniforme */
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
         }
-
+    
         button::before {
             content: "";
             position: absolute;
@@ -114,7 +118,7 @@
             filter: blur(8px);
             animation: glowing 20s linear infinite;
         }
-
+    
         @keyframes glowing {
             0% {
                 background-position: 0 0;
@@ -126,7 +130,7 @@
                 background-position: 0 0;
             }
         }
-
+    
         #resultado {
             background: rgba(255, 255, 255, 0.1);
             padding: 10px;
@@ -137,8 +141,9 @@
             color: azure;
             border-radius: 6px;
             font-size: 1rem;
+            margin-top: 10px; /* Espaciado superior */
         }
-
+    
         .button-container {
             display: flex;
             flex-wrap: wrap;
@@ -147,28 +152,53 @@
             opacity: 0; /* Ocultar inicialmente */
             transition: opacity 0.3s ease; /* Transición suave */
         }
-
+    
         .button-container.visible {
             opacity: 1; /* Mostrar con opacidad completa */
         }
-
+    
         .button-container button {
             flex: 1 1 calc(33.333% - 10px);
             padding: 5px;
             font-size: 1;
         }
-
+    
         h2 {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #fff;
             margin-top: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-
+    
         .hidden {
             visibility: hidden;
+        }
+    
+        /* Estilos para la previsualización de la integral */
+        .preview-area {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+    
+        .preview-area h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+    
+        #previewContent {
+            font-family: 'Poppins', monospace;
+            color: azure;
+            font-size: 1rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
         }
     </style>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -207,6 +237,14 @@
         <label for="funcion">Función:</label>
         <input type="text" id="funcion" placeholder="Ej: x^2">
 
+        <!-- Título fuera del recuadro de previsualización -->
+        <h2>La integral que será calculada es:</h2>
+
+        <!-- Área de previsualización de la integral (sin el título) -->
+        <div id="previewIntegral" class="preview-area">
+            <div id="previewContent"></div>
+        </div>
+        
         <label for="variable">Variable:</label>
         <input type="text" id="variable" placeholder="Ej: x">
 
