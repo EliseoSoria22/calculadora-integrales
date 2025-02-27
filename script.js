@@ -19,7 +19,7 @@ document.getElementById('calcular').addEventListener('click', function() {
         return;
     }
 
-    fetch('http://127.0.0.1:4040 ', {
+    fetch('https://4df4-2001-1388-a45-4624-2592-eafd-492c-aacd.ngrok-free.app/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
