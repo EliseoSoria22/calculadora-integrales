@@ -19,7 +19,7 @@ document.getElementById('calcular').addEventListener('click', function() {
         return;
     }
 
-    fetch('/calcular', {
+    fetch('http://127.0.0.1:4040 ', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ def aplicar_valor_absoluto(expr):
     return expr.replace(sp.log, lambda arg: sp.log(sp.Abs(arg)))
 
 # Verificar si es una integral definida o indefinida
-if limite_inferior is not None and limite_superior is not None:
+if limite_inferior and limite_superior:
     # Integral definida
     limite_inferior_sym = sp.sympify(limite_inferior)
     limite_superior_sym = sp.sympify(limite_superior)
@@ -32,7 +32,7 @@ else:
 resultado_latex = sp.latex(resultado)
 
 # Agregar la constante de integración en caso de integral indefinida
-if limite_inferior is None or limite_superior is None:
+if not (limite_inferior and limite_superior):
     resultado_latex += " + C"
 
 # Reemplazar funciones trigonométricas para mejor formato LaTeX
